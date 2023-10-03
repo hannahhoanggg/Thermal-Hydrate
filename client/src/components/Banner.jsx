@@ -1,12 +1,12 @@
 export default function Banner() {
   return (
-    <div className="w-screen flex items-center justify-center mx-auto bg-rose-200">
+    <div className="flex items-center justify-center w-screen mx-auto bg-rose-200">
       <img
         src="/images/logo.jpg"
         alt="logo"
         className="object-scale-down h-20"
       />
-      <h1 className="font-medium text-3xl px-10">THERMAL HYDRATE</h1>
+      <h1 className="px-10 text-3xl font-medium">THERMAL HYDRATE</h1>
     </div>
   );
 }
