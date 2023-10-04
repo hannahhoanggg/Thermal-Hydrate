@@ -1,6 +1,6 @@
 export default function Advertisement() {
   return (
-    <div className="flex-row w-screen px-10 py-5 mt-10 bg-pink-100 columns-3">
+    <div className="flex-row w-screen px-12 py-5 mt-10 bg-pink-100 columns-3">
       <img
         src="/images/reuse.jpg"
         alt="reuse"
