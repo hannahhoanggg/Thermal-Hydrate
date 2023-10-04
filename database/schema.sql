@@ -21,6 +21,9 @@ CREATE TABLE "order_items" (
 CREATE TABLE "products" (
   "productId" serial PRIMARY KEY,
   "name" text,
+  "style" text,
+  "color" text,
+  "image" text,
   "price" int
 );
 
