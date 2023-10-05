@@ -30,8 +30,49 @@ app.use(express.static(reactStaticDir));
 app.use(express.static(uploadsStaticDir));
 app.use(express.json());
 
-app.get('/api/hello', (req, res) => {
-  res.json({ message: 'Hello, World!' });
+// app.get('/api/hello', (req, res) => {
+//   res.json({ message: 'Hello, World!' });
+// });
+
+// GET all products
+app.get('/api/products', async (req, res, next) => {
+  try {
+    const sql = `select * from "products"`;
+    const result = await db.query(sql);
+    const products = result.rows;
+    if (!products) {
+      throw new ClientError(404, 'Cannot find any products');
+    }
+    res.json(products);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// GET products based on productId
+app.get('/api/products/productId', async (req, res, next) => {
+  try {
+    const productId = Number(req.params.productId);
+    if (!Number.isInteger(productId) || productId <= 0) {
+      throw new ClientError(400, 'ProductID must be a positive integer');
+    }
+    const sql = `select *
+    from "products"
+    where "productId" = '$1'
+    `;
+    const params = [productId];
+    const result = await db.query(sql, params);
+    const products = result.rows[0];
+    if (!products) {
+      throw new ClientError(
+        404,
+        `Cannot find any products with that ID ${productId}.`
+      );
+    }
+    res.json(products);
+  } catch (error) {
+    next(error);
+  }
 });
 
 /*
