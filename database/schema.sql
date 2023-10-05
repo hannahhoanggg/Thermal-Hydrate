@@ -11,7 +11,7 @@ CREATE TABLE "orders" (
   "userId" int NOT NULL
 );
 
-CREATE TABLE "order_items" (
+CREATE TABLE "orderItems" (
   "orderItemId" serial PRIMARY KEY,
   "orderId" int,
   "productId" int,
@@ -36,7 +36,7 @@ CREATE TABLE "users" (
   "hashedPassword" text
 );
 
-CREATE TABLE "payment_details" (
+CREATE TABLE "paymentDetails" (
   "paymentId" serial PRIMARY KEY,
   "orderId" int,
   "total" float
@@ -44,8 +44,8 @@ CREATE TABLE "payment_details" (
 
 ALTER TABLE "orders" ADD FOREIGN KEY ("userId") REFERENCES "users" ("userId");
 
-ALTER TABLE "order_items" ADD FOREIGN KEY ("orderId") REFERENCES "orders" ("orderId");
+ALTER TABLE "orderItems" ADD FOREIGN KEY ("orderId") REFERENCES "orders" ("orderId");
 
-ALTER TABLE "order_items" ADD FOREIGN KEY ("productId") REFERENCES "products" ("productId");
+ALTER TABLE "orderItems" ADD FOREIGN KEY ("productId") REFERENCES "products" ("productId");
 
-ALTER TABLE "payment_details" ADD FOREIGN KEY ("orderId") REFERENCES "orders" ("orderId");
+ALTER TABLE "paymentDetails" ADD FOREIGN KEY ("orderId") REFERENCES "orders" ("orderId");
