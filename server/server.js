@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars  -- Remove when used */
 import 'dotenv/config';
 import express from 'express';
 import pg from 'pg';
@@ -8,12 +7,12 @@ import {
   ClientError,
   errorMiddleware,
   defaultMiddleware,
+  authMiddleware,
 } from './lib/index.js';
 
 const connectionString =
   process.env.DATABASE_URL ||
   `postgresql://${process.env.RDS_USERNAME}:${process.env.RDS_PASSWORD}@${process.env.RDS_HOSTNAME}:${process.env.RDS_PORT}/${process.env.RDS_DB_NAME}`;
-// eslint-disable-next-line no-unused-vars -- Remove when used
 const db = new pg.Pool({
   connectionString,
   ssl: {
@@ -31,10 +30,6 @@ app.use(express.static(reactStaticDir));
 // Static directory for file uploads server/public/
 app.use(express.static(uploadsStaticDir));
 app.use(express.json());
-
-// app.get('/api/hello', (req, res) => {
-//   res.json({ message: 'Hello, World!' });
-// });
 
 // GET all products
 app.get('/api/products', async (req, res, next) => {
@@ -77,6 +72,40 @@ app.get('/api/products/:productId', async (req, res, next) => {
   }
 });
 
+// GET user's account info
+app.get('/api/tables/public.users', authMiddleware, async (req, res, next) => {
+  try {
+    const sql = `select "firstName", "lastName", "username", "email"
+    from "users"
+    order by "userId"`;
+    const result = await db.query(sql);
+    res.json(result.rows);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// GET orders by the userId
+app.get('/api/orders/:userId', authMiddleware, async (req, res, next) => {
+  try {
+    const userId = req.params.userId;
+    const sql = `
+    select *
+    from "users"
+    join "orders" using "userId"
+    join "orderItems" using "orderId"
+    join "products" using "productId"
+    where "userId" = $1
+    `;
+    const params = [userId];
+    const result = await db.query(sql, params);
+    const user = result.rows;
+    res.status(201).json(user);
+  } catch (error) {
+    next(error);
+  }
+});
+
 // User can create an account
 app.post('/api/sign-up', async (req, res, next) => {
   try {
@@ -92,13 +121,20 @@ app.post('/api/sign-up', async (req, res, next) => {
     const params = [username, hashedPassword, firstName, lastName, email];
     const result = await db.query(sql, params);
     const [user] = result.rows;
+    const sqlOrders = `
+    insert into "orders" ("userId")
+    values ($1)
+    returning *;
+    `;
+    const paramsOrders = [user.userId];
+    await db.query(sqlOrders, paramsOrders);
     res.status(201).json(user);
   } catch (err) {
     next(err);
   }
 });
 
-// User can log in
+// User can log into account
 app.post('/api/sign-in', async (req, res, next) => {
   try {
     const { username, password } = req.body;
@@ -128,6 +164,83 @@ app.post('/api/sign-in', async (req, res, next) => {
     next(err);
   }
 });
+
+// User can add to shopping cart
+app.post(
+  '/api/orderItems/:orderItemId',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const { orderId, productId, quantity } = req.body;
+      if (!orderId || !productId || !quantity)
+        throw new ClientError(
+          400,
+          'UserID, productID, and quantity are required fields'
+        );
+      const sql = `
+    insert into "orderItems" ("orderId", "productId", "quantity")
+    values ($1, $2, $3)
+    returning *;
+    `;
+      const params = [orderId, productId, quantity];
+      const result = await db.query(sql, params);
+      const [shoppingcart] = result.rows;
+      res.status(201).json(shoppingcart);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// User can update shopping cart
+app.put(
+  '/api/orderItems/:orderItemId',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const { orderId, productId, quantity } = req.body;
+      if (!quantity) throw new ClientError(400, 'Quantity is required');
+      const sql = `
+    update "orderItems"
+    set "quantity" = $3
+    where "orderId" = $1 and "productId" = $2
+    returning *;
+    `;
+      const params = [orderId, productId, quantity];
+      const result = await db.query(sql, params);
+      const order = result.rows;
+      res.status(201).json(order);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// User can delete product from shopping cart
+app.delete(
+  '/api/orderItems/:orderItemId',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const orderItemId = Number(req.params.orderItemId);
+      if (!Number.isInteger(orderItemId))
+        throw new ClientError(400, 'OrderItemID must be an integer.');
+      const sql = `
+    delete from "orderItems"
+    where "orderId" = $1 and "productId" = $2
+    returning *;
+    `;
+      const params = [orderItemId, req.user.orderItemId];
+      const result = await db.query(sql, params);
+      const [deleted] = result.rows;
+      if (!deleted)
+        throw new ClientError(404, `Entry with id ${orderItemId} not found.`);
+      res.sendStatus(204);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 /*
  * Middleware that handles paths that aren't handled by static middleware
