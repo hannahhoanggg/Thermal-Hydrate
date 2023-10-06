@@ -10,7 +10,7 @@
 --      ('Build projects', false),
 --      ('Get a job', false);
 
-insert into "products" ("productId", "name", "style", "color", "image", "price")
+insert into "products" ("name", "style", "color", "image", "price")
 values ('HYDROFLASK', '40 oz Wide Mouth with Flex Straw Cap', 'Dew', '/images/H1.jpg', 55),
        ('HYDROFLASK', '40 oz Wide Mouth with Flex Straw Cap', 'Black', '/images/H2.jpg', 55),
        ('HYDROFLASK', '40 oz Wide Mouth with Flex Straw Cap', 'Grapefruit', '/images/H3.jpg', 55),

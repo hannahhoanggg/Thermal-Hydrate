@@ -1,14 +1,36 @@
-import { useContext, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-// import AppContext from './components/AppContext';
+//import { useState, useEffect } from 'react';
+import Banner from './components/Banner';
+import NavBar from './components/NavBar';
+import BodyBanner from './components/BodyBanner';
+import Advertisement from './components/Advertisement';
+//import { Link } from 'react-router-dom';
 
 export default function Home() {
-  const { user } = useContext();
-  const navigate = useNavigate();
+  // const [products, setProducts] = useState();
+  // const [error, setError] = useState();
 
-  useEffect(() => {
-    if (!user) navigate('/sign-in');
-  }, [user, navigate]);
+  // useEffect(() => {
+  //   async function getProducts() {
+  //     try {
+  //       const response = await
+  //     }
+  //   }
+  // })
 
-  return <div></div>;
+  return (
+    <div>
+      <Banner />
+      <NavBar />
+      <h3 className="mt-10 text-2xl font-medium text-center">
+        Shop different brands!
+      </h3>
+      <a
+        href=""
+        className="flex justify-center py-1 text-lg font-normal underline cursor-pointer decoration-cyan-500 text-cyan-500">
+        Shop Now
+      </a>
+      <BodyBanner />
+      <Advertisement />
+    </div>
+  );
 }
