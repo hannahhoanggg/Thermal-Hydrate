@@ -1,14 +1,22 @@
-import { useContext, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-// import AppContext from './components/AppContext';
+import BodyBanner from '../components/BodyBanner';
+import Advertisement from '../components/Advertisement';
+import { Link } from 'react-router-dom';
 
 export default function Home() {
-  const { user } = useContext();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!user) navigate('/sign-in');
-  }, [user, navigate]);
-
-  return <div></div>;
+  return (
+    <div>
+      <h3 className="mt-10 text-2xl font-medium text-center">
+        Shop different brands!
+      </h3>
+      <div>
+        <Link
+          to="/catalog"
+          className="flex justify-center py-1 text-lg font-normal underline cursor-pointer decoration-cyan-500 text-cyan-500">
+          Shop Now
+        </Link>
+      </div>
+      <BodyBanner />
+      <Advertisement />
+    </div>
+  );
 }

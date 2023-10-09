@@ -73,10 +73,11 @@ app.get('/api/products/:productId', async (req, res, next) => {
 });
 
 // GET user's account info
-app.get('/api/tables/public.users', authMiddleware, async (req, res, next) => {
+app.get('/api/tables/users/:userId', authMiddleware, async (req, res, next) => {
   try {
     const sql = `select "firstName", "lastName", "username", "email"
     from "users"
+    where "userId" = $1
     order by "userId"`;
     const result = await db.query(sql);
     res.json(result.rows);
@@ -166,31 +167,28 @@ app.post('/api/sign-in', async (req, res, next) => {
 });
 
 // User can add to shopping cart
-app.post(
-  '/api/orderItems/:orderItemId',
-  authMiddleware,
-  async (req, res, next) => {
-    try {
-      const { orderId, productId, quantity } = req.body;
-      if (!orderId || !productId || !quantity)
-        throw new ClientError(
-          400,
-          'UserID, productID, and quantity are required fields'
-        );
-      const sql = `
+app.post('/api/orderItems/:orderId', authMiddleware, async (req, res, next) => {
+  try {
+    const orderId = req.params.orderId;
+    const { productId, quantity } = req.body;
+    if (!orderId || !productId || !quantity)
+      throw new ClientError(
+        400,
+        'OrderID, productID, and quantity are required fields'
+      );
+    const sql = `
     insert into "orderItems" ("orderId", "productId", "quantity")
     values ($1, $2, $3)
     returning *;
     `;
-      const params = [orderId, productId, quantity];
-      const result = await db.query(sql, params);
-      const [shoppingcart] = result.rows;
-      res.status(201).json(shoppingcart);
-    } catch (error) {
-      next(error);
-    }
+    const params = [orderId, productId, quantity];
+    const result = await db.query(sql, params);
+    const [shoppingcart] = result.rows;
+    res.status(201).json(shoppingcart);
+  } catch (error) {
+    next(error);
   }
-);
+});
 
 // User can update shopping cart
 app.put(
@@ -203,7 +201,7 @@ app.put(
       const sql = `
     update "orderItems"
     set "quantity" = $3
-    where "orderId" = $1 and "productId" = $2
+    where "orderItemId" = $1 and "productId" = $2
     returning *;
     `;
       const params = [orderId, productId, quantity];
@@ -227,7 +225,7 @@ app.delete(
         throw new ClientError(400, 'OrderItemID must be an integer.');
       const sql = `
     delete from "orderItems"
-    where "orderId" = $1 and "productId" = $2
+    where "orderItemId" = $1
     returning *;
     `;
       const params = [orderItemId, req.user.orderItemId];
