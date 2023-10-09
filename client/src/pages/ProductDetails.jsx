@@ -49,7 +49,7 @@ export default function ProductDetails() {
           <p>${price}</p>
         </div>
       </div>
-      <button className="px-4 py-2 font-medium bg-gray-300 rounded">
+      <button className="px-4 py-2 font-medium rounded bg-emerald-300">
         ADD TO CART
       </button>
     </div>
