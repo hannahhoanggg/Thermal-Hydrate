@@ -1,23 +1,54 @@
+import { useEffect, useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import AppContext from './components/AppContext';
+import Home from './pages/HomePage';
 import Banner from './components/Banner';
 import NavBar from './components/NavBar';
-import BodyBanner from './components/BodyBanner';
-import Advertisement from './components/Advertisement';
+import Catalog from './pages/Catalog';
+import ProductDetails from './pages/ProductDetails';
+
+const tokenKey = 'react-context-jwt';
 
 export default function App() {
+  const [user, setUser] = useState();
+  const [token, setToken] = useState();
+  const [isAuthorizing, setIsAuthorizing] = useState(true);
+
+  useEffect(() => {
+    const auth = localStorage.getItem(tokenKey);
+    if (auth) {
+      const { user, token } = JSON.parse(auth);
+      setUser(user);
+      setToken(token);
+    }
+    setIsAuthorizing(false);
+  }, []);
+
+  if (isAuthorizing) return null;
+
+  function handleSignIn(auth) {
+    localStorage.setItem(tokenKey, JSON.stringify(auth));
+    setUser(auth.user);
+    setToken(auth.token);
+  }
+
+  function handleSignOut() {
+    localStorage.removeItem(tokenKey);
+    setUser(undefined);
+    setToken(undefined);
+  }
+
+  const contextValue = { user, token, handleSignIn, handleSignOut };
+
   return (
-    <div>
-      <Banner />
-      <NavBar />
-      <h3 className="mt-10 text-2xl font-medium text-center">
-        Shop different brands!
-      </h3>
-      <a
-        href=""
-        className="flex justify-center py-1 text-lg font-normal underline cursor-pointer decoration-cyan-500 text-cyan-500">
-        Shop Now
-      </a>
-      <BodyBanner />
-      <Advertisement />
-    </div>
+    <AppContext.Provider value={contextValue}>
+      <Routes>
+        <Route path="/" element={<Banner />} />
+        <Route path="/" element={<NavBar />} />
+        <Route index element={<Home />} />
+        <Route path="/catalog" element={<Catalog />} />
+        <Route path="/productdetails" element={<ProductDetails />} />
+      </Routes>
+    </AppContext.Provider>
   );
 }

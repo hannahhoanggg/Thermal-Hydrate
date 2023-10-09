@@ -169,11 +169,12 @@ app.post('/api/sign-in', async (req, res, next) => {
 // User can add to shopping cart
 app.post('/api/orderItems/:orderId', authMiddleware, async (req, res, next) => {
   try {
-    const { orderId, productId, quantity } = req.body;
+    const orderId = req.params.orderId;
+    const { productId, quantity } = req.body;
     if (!orderId || !productId || !quantity)
       throw new ClientError(
         400,
-        'UserID, productID, and quantity are required fields'
+        'OrderID, productID, and quantity are required fields'
       );
     const sql = `
     insert into "orderItems" ("orderId", "productId", "quantity")
