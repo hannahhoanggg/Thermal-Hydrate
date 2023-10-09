@@ -10,7 +10,7 @@ export default function NavBar() {
   return (
     <div className="flex w-screen text-white bg-pink-300">
       <nav className="flex items-center space-x-5 ms-auto">
-        <Link to="/homepage" className="font-normal hover:text-teal-400">
+        <Link to="/home" className="font-normal hover:text-teal-400">
           Home
         </Link>
         <Link to="/catalog" className="font-normal hover:text-teal-400">

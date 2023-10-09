@@ -22,7 +22,7 @@ export default function ProductDetails() {
     }
     if (productId) {
       setIsLoading(true);
-      loadProduct(+productId);
+      loadProduct(productId);
     }
   }, [productId]);
 

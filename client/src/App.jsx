@@ -6,6 +6,7 @@ import Banner from './components/Banner';
 import NavBar from './components/NavBar';
 import Catalog from './pages/Catalog';
 import ProductDetails from './pages/ProductDetails';
+import NotFound from './pages/NotFound';
 
 const tokenKey = 'react-context-jwt';
 
@@ -45,9 +46,10 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Banner />} />
         <Route path="/" element={<NavBar />} />
-        <Route index element={<Home />} />
-        <Route path="/catalog" element={<Catalog />} />
-        <Route path="/productdetails" element={<ProductDetails />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="catalog" element={<Catalog />} />
+        <Route path="productdetails" element={<ProductDetails />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </AppContext.Provider>
   );

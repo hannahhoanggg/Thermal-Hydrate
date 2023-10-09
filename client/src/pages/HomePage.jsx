@@ -36,7 +36,7 @@ export default function Home() {
       <h3 className="mt-10 text-2xl font-medium text-center">
         Shop different brands!
       </h3>
-      <div className="row">
+      <div>
         {products?.map((product) => (
           <Link
             to="/catalog"
