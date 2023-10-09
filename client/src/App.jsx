@@ -3,7 +3,6 @@ import { Routes, Route } from 'react-router-dom';
 import AppContext from './components/AppContext';
 import Home from './pages/HomePage';
 import Banner from './components/Banner';
-import NavBar from './components/NavBar';
 import Catalog from './pages/Catalog';
 import ProductDetails from './pages/ProductDetails';
 import NotFound from './pages/NotFound';
@@ -44,11 +43,11 @@ export default function App() {
   return (
     <AppContext.Provider value={contextValue}>
       <Routes>
-        <Route path="/" element={<Banner />} />
-        <Route path="/" element={<NavBar />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="catalog" element={<Catalog />} />
-        <Route path="productdetails" element={<ProductDetails />} />
+        <Route path="/" element={<Banner />}>
+          <Route index element={<Home />} />
+          <Route path="catalog" element={<Catalog />} />
+          <Route path="details/:productId" element={<ProductDetails />} />
+        </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AppContext.Provider>

@@ -33,12 +33,25 @@ export default function ProductDetails() {
 
   return (
     <div>
-      <Link to="/">Back to Catalog</Link>
-      <img src={image} />
-      <h2>{name}</h2>
-      <h3>{style}</h3>
-      <h4>{color}</h4>
-      <p>{price}</p>
+      <Link to="/catalog" className="underline">
+        Back to Catalog
+      </Link>
+      <div className="flex items-center">
+        <img
+          src={image}
+          alt="insulated bottles"
+          className="object-contain h-80 w-80"
+        />
+        <div className="text-center">
+          <h2>{name}</h2>
+          <h3>{style}</h3>
+          <h4>{color}</h4>
+          <p>${price}</p>
+        </div>
+      </div>
+      <button className="px-4 py-2 font-medium bg-gray-300 rounded">
+        ADD TO CART
+      </button>
     </div>
   );
 }
