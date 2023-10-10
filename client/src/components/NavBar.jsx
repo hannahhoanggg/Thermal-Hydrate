@@ -9,14 +9,14 @@ export default function NavBar() {
 
   return (
     <div className="flex w-screen text-white bg-pink-300">
-      <nav className="flex items-center space-x-5 ms-auto">
+      <nav className="flex items-center space-x-3 ms-auto">
         <Link to="/" className="font-normal hover:text-teal-400">
           Home
         </Link>
         <Link to="/catalog" className="font-normal hover:text-teal-400">
           Products
         </Link>
-        <div>
+        <div className="flex items-center space-x-3 ms-auto">
           {user && (
             <Link
               to="/"
@@ -38,10 +38,10 @@ export default function NavBar() {
               </Link>
             </>
           )}
+          <Link to="/">
+            <GrCart className="cursor-pointer" />
+          </Link>
         </div>
-        <Link to="/">
-          <GrCart className="cursor-pointer" />
-        </Link>
       </nav>
     </div>
   );
