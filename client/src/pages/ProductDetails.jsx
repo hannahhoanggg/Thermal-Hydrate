@@ -64,7 +64,7 @@ export default function ProductDetails() {
         <CustomButton onClick={handleClickUp} count={count} text="+" />
       </div>
       <div className="flex justify-center mt-5">
-        <button className="px-4 py-2 font-medium rounded bg-emerald-400">
+        <button className="px-4 py-2 font-medium bg-teal-400 rounded">
           ADD TO CART
         </button>
       </div>
