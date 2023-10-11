@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import AppContext from './components/AppContext';
 import Home from './pages/HomePage';
+import AuthPage from './pages/AuthPage';
 import Banner from './components/Banner';
 import Catalog from './pages/Catalog';
+import RegistrationForm from './components/RegistrationForm';
 import ProductDetails from './pages/ProductDetails';
 import NotFound from './pages/NotFound';
 
@@ -47,6 +49,11 @@ export default function App() {
           <Route index element={<Home />} />
           <Route path="catalog" element={<Catalog />} />
           <Route path="details/:productId" element={<ProductDetails />} />
+          <Route path="sign-in" element={<AuthPage action="sign-in" />} />
+          <Route
+            path="sign-up"
+            element={<RegistrationForm action="sign-up" />}
+          />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
