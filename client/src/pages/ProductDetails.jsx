@@ -9,7 +9,7 @@ export default function ProductDetails() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState();
   const [quantity, setQuantity] = useState(0);
-  const { user } = useContext(AppContext);
+  const { user, token } = useContext(AppContext);
 
   useEffect(() => {
     async function loadProduct(productId) {
@@ -43,7 +43,7 @@ export default function ProductDetails() {
     setQuantity(quantity + 1);
   }
 
-  async function addToCart(orderId) {
+  async function addToCart() {
     if (!user) {
       alert('Please sign in to continue');
       navigate('/sign-in');
@@ -58,11 +58,11 @@ export default function ProductDetails() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(orderId),
+        body: JSON.stringify({ productId, quantity }),
       };
-      const res = await fetch('/api/orderItems', req);
+      const res = await fetch(`/api/orderItems/${user.userId}`, req);
       if (!res.ok) throw new Error(`fetch Error ${res.status}`);
       const data = await res.json();
       if (data) {

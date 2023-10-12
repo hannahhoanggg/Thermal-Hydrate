@@ -6,14 +6,9 @@ drop schema "public" cascade;
 
 create schema "public";
 
-CREATE TABLE "orders" (
-  "orderId" serial PRIMARY KEY,
-  "userId" int NOT NULL
-);
-
 CREATE TABLE "orderItems" (
   "orderItemId" serial PRIMARY KEY,
-  "orderId" int,
+  "userId" int,
   "productId" int,
   "quantity" int
 );
@@ -38,14 +33,13 @@ CREATE TABLE "users" (
 
 CREATE TABLE "paymentDetails" (
   "paymentId" serial PRIMARY KEY,
-  "orderId" int,
+  "userId" int,
   "total" float
 );
 
-ALTER TABLE "orders" ADD FOREIGN KEY ("userId") REFERENCES "users" ("userId");
 
-ALTER TABLE "orderItems" ADD FOREIGN KEY ("orderId") REFERENCES "orders" ("orderId");
+ALTER TABLE "orderItems" ADD FOREIGN KEY ("userId") REFERENCES "users" ("userId");
 
 ALTER TABLE "orderItems" ADD FOREIGN KEY ("productId") REFERENCES "products" ("productId");
 
-ALTER TABLE "paymentDetails" ADD FOREIGN KEY ("orderId") REFERENCES "orders" ("orderId");
+ALTER TABLE "paymentDetails" ADD FOREIGN KEY ("userId") REFERENCES "users" ("userId");

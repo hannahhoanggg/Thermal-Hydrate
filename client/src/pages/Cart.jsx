@@ -1,17 +1,17 @@
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useState, useEffect, useContext } from 'react';
+import AppContext from '../components/AppContext';
 
 export default function Cart() {
   const [cart, setCart] = useState();
   const [error, setError] = useState();
   const [isLoading, setIsLoading] = useState(false);
-  const { orderId } = useParams();
+  const { user } = useContext(AppContext);
 
   useEffect(() => {
     async function fetchCartItem() {
       setError(undefined);
       try {
-        const response = await fetch(`/api/orderItems/${orderId}`);
+        const response = await fetch(`/api/orderItems/${user.userId}`);
         if (!response.ok) throw new Error(`fetch Error ${response.status}`);
         const cartItems = await response.json();
         setCart(cartItems);
@@ -23,7 +23,7 @@ export default function Cart() {
     }
     setIsLoading(true);
     fetchCartItem();
-  }, [orderId]);
+  }, [user.userId]);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error! {error.message}</div>;
