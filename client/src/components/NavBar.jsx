@@ -38,7 +38,7 @@ export default function NavBar() {
               </Link>
             </>
           )}
-          <Link to="/">
+          <Link to="/cart">
             <GrCart className="cursor-pointer" />
           </Link>
         </div>

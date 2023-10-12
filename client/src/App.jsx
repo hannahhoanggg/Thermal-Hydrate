@@ -8,6 +8,7 @@ import Catalog from './pages/Catalog';
 import RegistrationForm from './components/RegistrationForm';
 import ProductDetails from './pages/ProductDetails';
 import NotFound from './pages/NotFound';
+import Cart from './pages/Cart';
 
 const tokenKey = 'react-context-jwt';
 
@@ -54,6 +55,7 @@ export default function App() {
             path="sign-up"
             element={<RegistrationForm action="sign-up" />}
           />
+          <Route path="cart" element={<Cart />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

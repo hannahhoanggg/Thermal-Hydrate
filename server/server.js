@@ -190,6 +190,28 @@ app.post('/api/orderItems/:orderId', authMiddleware, async (req, res, next) => {
   }
 });
 
+// GET request to display items
+app.get('/api/orderItems/:orderId', async (req, res, next) => {
+  try {
+    const orderId = Number(req.params.orderId);
+    if (!Number.isInteger(orderId) || orderId <= 0) {
+      throw new ClientError(400, 'OrderID must be a positive integer');
+    }
+    const sql = `
+    select "products"."name", "products"."style", "products"."image", "products"."price", "orderItems"."quantity", "orderItems"."orderItemId"
+    from "products"
+    join "orderItems" using ("productId")
+    where "orderId" = $1
+    `;
+    const params = [orderId];
+    const result = await db.query(sql, params);
+    const cartItems = result.rows;
+    res.json(cartItems);
+  } catch (error) {
+    next(error);
+  }
+});
+
 // User can update shopping cart
 app.put(
   '/api/orderItems/:orderItemId',
