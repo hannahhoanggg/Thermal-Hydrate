@@ -18,12 +18,17 @@ export default function NavBar() {
         </Link>
         <div className="flex items-center space-x-3 ms-auto">
           {user && (
-            <Link
-              to="/"
-              onClick={handleSignOut}
-              className="font-normal hover:text-teal-400">
-              Sign Out
-            </Link>
+            <>
+              <Link
+                to="/"
+                onClick={handleSignOut}
+                className="font-normal hover:text-teal-400">
+                Sign Out
+              </Link>
+              <Link to="/cart">
+                <GrCart className="cursor-pointer" />
+              </Link>
+            </>
           )}
           {!user && (
             <>
@@ -38,9 +43,6 @@ export default function NavBar() {
               </Link>
             </>
           )}
-          <Link to="/cart">
-            <GrCart className="cursor-pointer" />
-          </Link>
         </div>
       </nav>
     </div>

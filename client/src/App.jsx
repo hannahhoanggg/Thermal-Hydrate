@@ -10,7 +10,7 @@ import ProductDetails from './pages/ProductDetails';
 import NotFound from './pages/NotFound';
 import Cart from './pages/Cart';
 
-const tokenKey = 'react-context-jwt';
+const tokenKey = 'thermal-hydrate';
 
 export default function App() {
   const [user, setUser] = useState();

@@ -34,6 +34,3 @@ values ('HYDROFLASK', '40 oz Wide Mouth with Flex Straw Cap', 'Dew', '/images/H1
 
 insert into "users" ("userId", "firstName", "lastName", "email", "username", "hashedPassword")
 values (1, 'Hannah', 'Hoang', 'hello@yahoo.com', 'hannah', '$argon2id$v=19$m=4096,t=3,p=1$RW1Rjr2yZxJ7+lGmPNQuOg$RyKFhjq4r8xuk7uY6GDDWjOMQ6IpAVx7murGif9F8kY')
-
--- insert into "orderItems" ("orderId", "productId", "quantity")
--- values ('1', '3', '1')
