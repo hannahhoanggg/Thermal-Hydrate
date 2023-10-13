@@ -1,7 +1,11 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import AppContext from './AppContext';
 
 export default function SignIn() {
   const [isLoading, setIsLoading] = useState(false);
+  const { handleSignIn } = useContext(AppContext);
+  const navigate = useNavigate();
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -18,9 +22,8 @@ export default function SignIn() {
       if (!res.ok) {
         throw new Error(`fetch Error ${res.status}`);
       }
-      const { user, token } = await res.json();
-      sessionStorage.setItem('token', token);
-      console.log('Signed In', user, '; received token:', token);
+      handleSignIn(await res.json());
+      navigate('/');
     } catch (error) {
       alert(`Error signing in: ${error}`);
     } finally {

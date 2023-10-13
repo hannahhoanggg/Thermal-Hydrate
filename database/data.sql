@@ -30,7 +30,7 @@ values ('HYDROFLASK', '40 oz Wide Mouth with Flex Straw Cap', 'Dew', '/images/H1
        ('TAKEYA', 'Insulated Stainless Steel Water Bottle With Straw Lid 24 oz', 'Lilac', '/images/T2.png', 35),
        ('TAKEYA', 'Insulated Stainless Steel Water Bottle With Straw Lid 24 oz', 'Teal', '/images/T3.png', 35),
        ('TAKEYA', 'Insulated Stainless Steel Water Bottle With Straw Lid 24 oz', 'Arctic', '/images/T4.png', 35),
-       ('TAKEYA', 'Insulated Stainless Steel Water Bottle With Straw Lid 24 oz', 'Blush', '/images/T5.png', 35)
+       ('TAKEYA', 'Insulated Stainless Steel Water Bottle With Straw Lid 24 oz', 'Blush', '/images/T5.png', 35);
 
 insert into "users" ("userId", "firstName", "lastName", "email", "username", "hashedPassword")
-values (1, "Hannah", "Hoang", "hello@yahoo.com", "hannah", "$argon2id$v=19$m=4096,t=3,p=1$RW1Rjr2yZxJ7+lGmPNQuOg$RyKFhjq4r8xuk7uY6GDDWjOMQ6IpAVx7murGif9F8kY")
+values (1, 'Hannah', 'Hoang', 'hello@yahoo.com', 'hannah', '$argon2id$v=19$m=4096,t=3,p=1$RW1Rjr2yZxJ7+lGmPNQuOg$RyKFhjq4r8xuk7uY6GDDWjOMQ6IpAVx7murGif9F8kY')

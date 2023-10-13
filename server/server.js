@@ -167,24 +167,46 @@ app.post('/api/sign-in', async (req, res, next) => {
 });
 
 // User can add to shopping cart
-app.post('/api/orderItems/:orderId', authMiddleware, async (req, res, next) => {
+app.post('/api/orderItems/:userId', authMiddleware, async (req, res, next) => {
   try {
-    const orderId = req.params.orderId;
+    const userId = req.params.userId;
     const { productId, quantity } = req.body;
-    if (!orderId || !productId || !quantity)
+    if (!userId || !productId || !quantity)
       throw new ClientError(
         400,
-        'OrderID, productID, and quantity are required fields'
+        'UserID, productID, and quantity are required fields'
       );
     const sql = `
-    insert into "orderItems" ("orderId", "productId", "quantity")
+    insert into "orderItems" ("userId", "productId", "quantity")
     values ($1, $2, $3)
     returning *;
     `;
-    const params = [orderId, productId, quantity];
+    const params = [userId, productId, quantity];
     const result = await db.query(sql, params);
     const [shoppingcart] = result.rows;
     res.status(201).json(shoppingcart);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// GET request to display items
+app.get('/api/orderItems/:userId', async (req, res, next) => {
+  try {
+    const userId = Number(req.params.userId);
+    if (!Number.isInteger(userId) || userId <= 0) {
+      throw new ClientError(400, 'UserID must be a positive integer');
+    }
+    const sql = `
+    select "products"."name", "products"."style", "products"."image", "products"."price", "orderItems"."quantity", "orderItems"."orderItemId"
+    from "products"
+    join "orderItems" using ("productId")
+    where "userId" = $1
+    `;
+    const params = [userId];
+    const result = await db.query(sql, params);
+    const cartItems = result.rows;
+    res.json(cartItems);
   } catch (error) {
     next(error);
   }
