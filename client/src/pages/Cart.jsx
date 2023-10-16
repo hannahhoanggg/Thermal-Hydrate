@@ -1,11 +1,18 @@
 import { useState, useEffect, useContext } from 'react';
+import { Link } from 'react-router-dom';
 import AppContext from '../components/AppContext';
 
 export default function Cart() {
-  const [cart, setCart] = useState();
+  const [cart, setCart] = useState([]);
   const [error, setError] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useContext(AppContext);
+
+  let subtotal = 0;
+  cart.forEach((item) => (subtotal += item.price * item.quantity));
+  const salesTax = subtotal * 0.0725;
+  const shipping = 5;
+  const checkoutTotal = subtotal + salesTax + shipping;
 
   useEffect(() => {
     async function fetchCartItem() {
@@ -33,6 +40,16 @@ export default function Cart() {
       <h1 className="mt-5 text-2xl font-semibold text-center text-teal-500">
         Your Shopping Cart
       </h1>
+      {!cart[0] && (
+        <div>
+          <div className="mt-5 text-center">
+            Your shopping cart is currently empty.
+          </div>
+          <Link to="/catalog" className="underline">
+            Back to Catalog
+          </Link>
+        </div>
+      )}
       <div className="container grid flex-col grid-cols-2 mt-4 space-x-8">
         <div>
           {cart?.map((product, index) => (
@@ -49,9 +66,22 @@ export default function Cart() {
         </div>
         <div className="space-y-10 border-2 bg-slate-200 border-cyan-300">
           <h1 className="mt-3 text-lg font-bold text-center">ORDER SUMMARY</h1>
-          <p className="font-normal">Subtotal</p>
-          <p className="font-normal">Shipping</p>
-          <p className="font-normal">Tax</p>
+          <div className="font-medium columns-2">
+            Subtotal
+            <div className="font-normal">${subtotal.toFixed(2)}</div>
+          </div>
+          <div className="font-medium columns-2">
+            Shipping
+            <div className="font-normal">$5.00</div>
+          </div>
+          <div className="font-medium columns-2">
+            Tax
+            <div className="font-normal">${salesTax.toFixed(2)}</div>
+          </div>
+          <div className="font-medium columns-2">
+            Total
+            <div className="font-normal">${checkoutTotal.toFixed(2)}</div>
+          </div>
           <div className="mt-8 text-center">
             <button
               type="submit"
