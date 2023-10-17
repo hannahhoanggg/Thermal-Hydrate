@@ -6,7 +6,7 @@ export default function Cart() {
   const [cart, setCart] = useState([]);
   const [error, setError] = useState();
   const [isLoading, setIsLoading] = useState(false);
-  const { user } = useContext(AppContext);
+  const { user, token } = useContext(AppContext);
 
   let subtotal = 0;
   cart.forEach((item) => (subtotal += item.price * item.quantity));
@@ -35,6 +35,29 @@ export default function Cart() {
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error! {error.message}</div>;
 
+  async function updateCart(orderItemId, quantity) {
+    try {
+      const req = {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ quantity }),
+      };
+      const res = await fetch(`/api/orderItems/${orderItemId}`, req);
+      if (!res.ok) throw new Error(`fetch error ${res.status}`);
+      const update = await res.json();
+      if (update) alert('Cart has been updated!', update);
+      const updatedCart = cart.map((item) =>
+        item.orderItemId === orderItemId ? { ...item, quantity } : item
+      );
+      setCart(updatedCart);
+    } catch (error) {
+      setError(error);
+    }
+  }
+
   return (
     <div className="mt-4">
       <h1 className="mt-5 text-2xl font-semibold text-center text-teal-500">
@@ -58,7 +81,23 @@ export default function Cart() {
               <div>
                 <h4 className="font-medium">{product.name}</h4>
                 <h4>{product.style}</h4>
-                <h4>Quantity: {product.quantity}</h4>
+                <label>
+                  Quantity:
+                  <select
+                    name="quantity"
+                    value={product.quantity}
+                    onChange={(e) =>
+                      updateCart(product.orderItemId, Number(e.target.value))
+                    }
+                    className="ml-3 bg-gray-200 border border-rose-300">
+                    <option className="font-medium">{product.quantity}</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                  </select>
+                </label>
                 <h4>${product.price}</h4>
               </div>
             </div>
