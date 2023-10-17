@@ -218,17 +218,18 @@ app.put(
   authMiddleware,
   async (req, res, next) => {
     try {
-      const { orderId, productId, quantity } = req.body;
+      const orderItemId = Number(req.params.orderItemId);
+      const { quantity } = req.body;
       if (!quantity) throw new ClientError(400, 'Quantity is required');
       const sql = `
     update "orderItems"
     set "quantity" = $3
-    where "orderItemId" = $1 and "productId" = $2
+    where "orderItemId" = $1 and "userId" = $2
     returning *;
     `;
-      const params = [orderId, productId, quantity];
+      const params = [orderItemId, req.user.userId, quantity];
       const result = await db.query(sql, params);
-      const order = result.rows;
+      const order = result.rows[0];
       res.status(201).json(order);
     } catch (error) {
       next(error);
