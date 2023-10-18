@@ -53,6 +53,10 @@ export default function ProductDetails() {
       alert('Please select a quantity to continue');
       return;
     }
+    if (quantity <= 0) {
+      alert('Quantity must be a positive integer.');
+      return;
+    }
     try {
       const req = {
         method: 'POST',
