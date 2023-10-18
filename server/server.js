@@ -176,6 +176,8 @@ app.post('/api/orderItems/:userId', authMiddleware, async (req, res, next) => {
         400,
         'UserID, productID, and quantity are required fields'
       );
+    if (quantity <= 0)
+      throw new ClientError(400, 'Quantity must be a positive integer.');
     const sql = `
     insert into "orderItems" ("userId", "productId", "quantity")
     values ($1, $2, $3)
@@ -251,7 +253,7 @@ app.delete(
     where "orderItemId" = $1
     returning *;
     `;
-      const params = [orderItemId, req.user.orderItemId];
+      const params = [orderItemId];
       const result = await db.query(sql, params);
       const [deleted] = result.rows;
       if (!deleted)
