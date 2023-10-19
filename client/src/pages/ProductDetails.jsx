@@ -46,6 +46,9 @@ export default function ProductDetails() {
   async function addToCart() {
     if (!user) {
       alert('Please sign in to continue');
+      alert(
+        'If you do not wish to create an account, please use the guest account. Username: guest Password: guest'
+      );
       navigate('/sign-in');
       return;
     }
