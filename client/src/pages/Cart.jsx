@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import AppContext from '../components/AppContext';
 import { FaTrashAlt } from 'react-icons/fa';
 
@@ -8,6 +8,7 @@ export default function Cart() {
   const [error, setError] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const { user, token } = useContext(AppContext);
+  const navigate = useNavigate();
 
   let subtotal = 0;
   cart.forEach((item) => (subtotal += item.price * item.quantity));
@@ -73,6 +74,10 @@ export default function Cart() {
     } catch (error) {
       setError(error);
     }
+  }
+
+  async function handleCheckout() {
+    navigate('/checkout');
   }
 
   return (
@@ -159,6 +164,7 @@ export default function Cart() {
             <div className="mt-8 text-center">
               <button
                 type="submit"
+                onClick={handleCheckout}
                 className="p-1.5 font-medium border-2 border-black border-solid rounded bg-slate-500">
                 Checkout
               </button>

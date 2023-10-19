@@ -9,6 +9,7 @@ import RegistrationForm from './components/RegistrationForm';
 import ProductDetails from './pages/ProductDetails';
 import NotFound from './pages/NotFound';
 import Cart from './pages/Cart';
+import Checkout from './pages/Checkout';
 
 const tokenKey = 'thermal-hydrate';
 
@@ -56,6 +57,7 @@ export default function App() {
             element={<RegistrationForm action="sign-up" />}
           />
           <Route path="cart" element={<Cart />} />
+          <Route path="checkout" element={<Checkout />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
