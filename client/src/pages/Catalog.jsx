@@ -50,7 +50,7 @@ function ProductCard({ product }) {
         <img
           src={image}
           alt="insulated bottles"
-          className="object-contain h-48 mx-auto"
+          className="object-cover h-48 mx-auto"
         />
         <h2 className="text-xl font-medium">{name}</h2>
         <h4 className="text-base font-normal">{style}</h4>
