@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import AppContext from '../components/AppContext';
+import { fetchProducts } from '../Cleanup';
 
 export default function ProductDetails() {
   const { productId } = useParams();
@@ -14,10 +15,8 @@ export default function ProductDetails() {
   useEffect(() => {
     async function loadProduct(productId) {
       try {
-        const product = await fetch(`/api/products/${productId}`);
-        if (!product.ok) throw new Error(`Fetch Error ${product.status}`);
-        const user = await product.json();
-        setProduct(user);
+        const product = await fetchProducts(productId);
+        setProduct(product);
       } catch (error) {
         setError(error);
       } finally {
@@ -74,7 +73,7 @@ export default function ProductDetails() {
       const data = await res.json();
       if (data) {
         navigate('/cart');
-        alert('Added to cart!', data);
+        alert('Added to cart!');
       }
     } catch (error) {
       console.log(error);
