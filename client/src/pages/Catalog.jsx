@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { fetchCatalog } from '../Cleanup';
 
 export default function Catalog() {
   const [products, setProducts] = useState([]);
@@ -9,10 +10,8 @@ export default function Catalog() {
   useEffect(() => {
     async function loadCatalog() {
       try {
-        const response = await fetch('/api/products');
-        if (!response.ok) throw new Error(`fetch Error ${response.status}`);
-        const user = await response.json();
-        setProducts(user);
+        const response = await fetchCatalog();
+        setProducts(response);
       } catch (error) {
         setError(error);
       } finally {

@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AppContext from '../components/AppContext';
 import { FaTrashAlt } from 'react-icons/fa';
+import { fetchCart, deleteItem, updateItem } from '../Cleanup';
 
 export default function Cart() {
   const [cart, setCart] = useState([]);
@@ -20,9 +21,7 @@ export default function Cart() {
     async function fetchCartItem() {
       setError(undefined);
       try {
-        const response = await fetch(`/api/orderItems/${user.userId}`);
-        if (!response.ok) throw new Error(`fetch Error ${response.status}`);
-        const cartItems = await response.json();
+        const cartItems = await fetchCart(user.userId);
         setCart(cartItems);
       } catch (error) {
         setError(error);
@@ -39,37 +38,21 @@ export default function Cart() {
 
   async function updateCart(orderItemId, quantity) {
     try {
-      const req = {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ quantity }),
-      };
-      const res = await fetch(`/api/orderItems/${orderItemId}`, req);
-      if (!res.ok) throw new Error(`fetch error ${res.status}`);
-      const update = await res.json();
-      if (update) alert('Cart has been updated!', update);
       const updatedCart = cart.map((item) =>
         item.orderItemId === orderItemId ? { ...item, quantity } : item
       );
+      if (updatedCart) alert('Your cart has been updated!');
+      await updateItem(orderItemId, quantity, token);
       setCart(updatedCart);
     } catch (error) {
       setError(error);
     }
   }
 
-  async function deleteCart(orderItemId) {
+  async function deleteCart(orderItemId, productId) {
     try {
-      const req = {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      await fetch(`/api/orderItems/${orderItemId}`, req);
       const updatedCart = cart.filter((i) => i.orderItemId !== orderItemId);
+      await deleteItem(orderItemId, productId, token);
       setCart(updatedCart);
     } catch (error) {
       setError(error);

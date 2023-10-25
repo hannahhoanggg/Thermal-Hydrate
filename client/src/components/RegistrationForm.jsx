@@ -20,7 +20,7 @@ export default function RegistrationForm() {
       if (!res.ok) throw new Error(`fetch Error ${res.status}`);
       const user = await res.json();
       if (user) navigate('/sign-in');
-      alert('Registered', user);
+      alert('You have successfully registered an account', user);
     } catch (error) {
       alert(`Error registering user: ${error}`);
     } finally {
