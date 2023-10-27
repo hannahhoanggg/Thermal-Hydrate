@@ -22,14 +22,14 @@ http://thermal-hydrate-dev.us-west-2.elasticbeanstalk.com/
 
 ### Technologies Used 
 
-React.js
-PostgreSQL
-Node.js
-Express
-Tailwind CSS
-HTML5
-AWS Elastic Beanstalk
-Dbdiagram
+* React.js
+* PostgreSQL
+* Node.js
+* Express
+* Tailwind CSS
+* HTML5
+* AWS Elastic Beanstalk
+* Dbdiagram
 
 ### Preview 
 
