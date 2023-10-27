@@ -6,6 +6,7 @@
     "declaration-block-no-redundant-longhand-properties": null,
     "keyframes-name-pattern": null,
     "no-empty-source": null,
-    "selector-class-pattern": null
+    "selector-class-pattern": null,
+    "at-rule-no-unknown": null
   }
 }
