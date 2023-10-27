@@ -40,11 +40,11 @@ http://thermal-hydrate-dev.us-west-2.elasticbeanstalk.com/
 
 1. Clone the repository.
 2. Install all dependencies with `npm install`.
-3.. Start PostgreSQL
+3. Start PostgreSQL
    ```sh
    sudo service postgresql start
    ```
-4.. Create database 
+4. Create database 
    ```sh
    createdb ThermalHydrate
    ```
